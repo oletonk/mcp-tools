@@ -77,7 +77,7 @@
     "implementation": {
       "type": "http",
       "method": "POST",
-      "url": "https://your-n8n-server/webhook/mcp/generate-pdf",
+      "url": "https://webhook.aitechnic.ru/webhook/generate_pdf",
       "delayed_response": {
         "webhook_field": "context.delayed_response_webhook"
       }
