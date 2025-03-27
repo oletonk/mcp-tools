@@ -1,66 +1,181 @@
 {
   "tool": {
     "name": "generatePDFPresentation",
-    "description": "Generate a PDF presentation about real estate projects using filters like price, city, and handover date.",
+    "description": "Generate a PDF presentation about real estate projects in Dubai with given filters.",
     "input_schema": {
       "type": "object",
       "properties": {
-        "params": {
-          "type": "object",
-          "properties": {
-            "type": { "type": "string", "enum": ["project"] },
-            "price": {
-              "type": "object",
-              "properties": {
-                "min": { "type": ["number", "null"] },
-                "max": { "type": ["number", "null"] },
-                "currency": { "type": "string" }
-              },
-              "required": ["min", "max", "currency"]
-            },
-            "city": { "type": "string" },
-            "city_districts": {
-              "type": ["array", "null"],
-              "items": { "type": "string" }
-            },
-            "handover": { "type": ["object", "null"] }
-          },
-          "required": ["type", "price", "city", "city_districts", "handover"]
-        },
-        "generation_params": {
-          "type": "object",
-          "properties": {
-            "locale": { "type": ["string", "null"] },
-            "currency": { "type": ["string", "null"] },
-            "areaUnit": {
-              "type": ["string", "null"],
-              "enum": ["sqft", "sqm"]
-            }
-          },
-          "required": ["locale", "currency", "areaUnit"]
-        },
         "context": {
           "type": "object",
           "properties": {
             "delayed_response_webhook": {
               "type": "object",
               "properties": {
-                "url": { "type": "string", "format": "uri" }
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "call_id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "call_id"
+                  ]
+                }
               },
-              "required": ["url"]
+              "required": [
+                "url",
+                "metadata"
+              ]
             }
           },
-          "required": ["delayed_response_webhook"]
+          "required": [
+            "delayed_response_webhook"
+          ]
+        },
+        "functions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "enum": [
+                  "generate_pdf_for_project_by_params"
+                ]
+              },
+              "arguments": {
+                "type": "object",
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "project"
+                        ]
+                      },
+                      "price": {
+                        "type": "object",
+                        "properties": {
+                          "min": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "max": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "currency": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "min",
+                          "max",
+                          "currency"
+                        ]
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "city_districts": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "handover": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "price",
+                      "city",
+                      "city_districts",
+                      "handover"
+                    ]
+                  },
+                  "generation_params": {
+                    "type": "object",
+                    "properties": {
+                      "locale": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "currency": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "areaUnit": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "enum": [
+                          "sqft",
+                          "sqm"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "locale",
+                      "currency",
+                      "areaUnit"
+                    ]
+                  }
+                },
+                "required": [
+                  "params",
+                  "generation_params"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "arguments"
+            ]
+          }
         }
       },
-      "required": ["params", "generation_params", "context"]
+      "required": [
+        "context",
+        "functions"
+      ]
     },
     "output_schema": {
       "type": "object",
       "properties": {
-        "projects_pdf_url": { "type": "string", "format": "uri" },
-        "content_type": { "type": "string" },
-        "context_size_byte": { "type": "integer" }
+        "projects_pdf_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "content_type": {
+          "type": "string"
+        },
+        "context_size_byte": {
+          "type": "integer"
+        }
       }
     },
     "implementation": {
