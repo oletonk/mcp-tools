@@ -1,17 +1,14 @@
 {
   "tool": {
     "name": "generatePDFPresentation",
-    "description": "Generate a PDF presentation about real estate projects in a specific city with filters like price, districts, and handover date.",
+    "description": "Generate a PDF presentation about real estate projects using filters like price, city, and handover date.",
     "input_schema": {
       "type": "object",
       "properties": {
         "params": {
           "type": "object",
           "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["project"]
-            },
+            "type": { "type": "string", "enum": ["project"] },
             "price": {
               "type": "object",
               "properties": {
@@ -26,28 +23,7 @@
               "type": ["array", "null"],
               "items": { "type": "string" }
             },
-            "handover": {
-              "type": ["object", "null"],
-              "properties": {
-                "min": {
-                  "type": ["object", "null"],
-                  "properties": {
-                    "year": { "type": "integer" },
-                    "quarter": { "type": ["integer", "null"] }
-                  },
-                  "required": ["year", "quarter"]
-                },
-                "max": {
-                  "type": ["object", "null"],
-                  "properties": {
-                    "year": { "type": "integer" },
-                    "quarter": { "type": ["integer", "null"] }
-                  },
-                  "required": ["year", "quarter"]
-                }
-              },
-              "required": ["min", "max"]
-            }
+            "handover": { "type": ["object", "null"] }
           },
           "required": ["type", "price", "city", "city_districts", "handover"]
         },
@@ -62,9 +38,22 @@
             }
           },
           "required": ["locale", "currency", "areaUnit"]
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "delayed_response_webhook": {
+              "type": "object",
+              "properties": {
+                "url": { "type": "string", "format": "uri" }
+              },
+              "required": ["url"]
+            }
+          },
+          "required": ["delayed_response_webhook"]
         }
       },
-      "required": ["params", "generation_params"]
+      "required": ["params", "generation_params", "context"]
     },
     "output_schema": {
       "type": "object",
@@ -77,7 +66,10 @@
     "implementation": {
       "type": "http",
       "method": "POST",
-      "url": "https://webhook.aitechnic.ru/webhook/generate_pdf",
+      "url": "https://ai-assistant.b.realiste.dev/api/v1/open_ai/function_handler",
+      "headers": {
+        "X-AUTH-TOKEN": "Im7o5fEwjw516sf2xmXKVDlZIzDgdGAz8zkjDZP7VOFepGzAbe2JL9rWEGdY6Itm"
+      },
       "delayed_response": {
         "webhook_field": "context.delayed_response_webhook"
       }
