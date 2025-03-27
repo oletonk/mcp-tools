@@ -1,0 +1,86 @@
+{
+  "tool": {
+    "name": "generatePDFPresentation",
+    "description": "Generate a PDF presentation about real estate projects in a specific city with filters like price, districts, and handover date.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["project"]
+            },
+            "price": {
+              "type": "object",
+              "properties": {
+                "min": { "type": ["number", "null"] },
+                "max": { "type": ["number", "null"] },
+                "currency": { "type": "string" }
+              },
+              "required": ["min", "max", "currency"]
+            },
+            "city": { "type": "string" },
+            "city_districts": {
+              "type": ["array", "null"],
+              "items": { "type": "string" }
+            },
+            "handover": {
+              "type": ["object", "null"],
+              "properties": {
+                "min": {
+                  "type": ["object", "null"],
+                  "properties": {
+                    "year": { "type": "integer" },
+                    "quarter": { "type": ["integer", "null"] }
+                  },
+                  "required": ["year", "quarter"]
+                },
+                "max": {
+                  "type": ["object", "null"],
+                  "properties": {
+                    "year": { "type": "integer" },
+                    "quarter": { "type": ["integer", "null"] }
+                  },
+                  "required": ["year", "quarter"]
+                }
+              },
+              "required": ["min", "max"]
+            }
+          },
+          "required": ["type", "price", "city", "city_districts", "handover"]
+        },
+        "generation_params": {
+          "type": "object",
+          "properties": {
+            "locale": { "type": ["string", "null"] },
+            "currency": { "type": ["string", "null"] },
+            "areaUnit": {
+              "type": ["string", "null"],
+              "enum": ["sqft", "sqm"]
+            }
+          },
+          "required": ["locale", "currency", "areaUnit"]
+        }
+      },
+      "required": ["params", "generation_params"]
+    },
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "projects_pdf_url": { "type": "string", "format": "uri" },
+        "content_type": { "type": "string" },
+        "context_size_byte": { "type": "integer" }
+      }
+    },
+    "implementation": {
+      "type": "http",
+      "method": "POST",
+      "url": "https://your-n8n-server/webhook/mcp/generate-pdf",
+      "delayed_response": {
+        "webhook_field": "context.delayed_response_webhook"
+      }
+    }
+  }
+}
