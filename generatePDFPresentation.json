@@ -32,6 +32,9 @@
                     },
                     "chat_id": {
                       "type": "string"
+                    },
+                    "language": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -39,7 +42,8 @@
                     "message_id",
                     "channel_id",
                     "chat_type",
-                    "chat_id"
+                    "chat_id",
+                    "language"
                   ]
                 }
               },
