@@ -20,10 +20,26 @@
                   "properties": {
                     "call_id": {
                       "type": "string"
+                    },
+                    "message_id": {
+                      "type": "string"
+                    },
+                    "channel_id": {
+                      "type": "string"
+                    },
+                    "chat_type": {
+                      "type": "string"
+                    },
+                    "chat_id": {
+                      "type": "string"
                     }
                   },
                   "required": [
-                    "call_id"
+                    "call_id",
+                    "message_id",
+                    "channel_id",
+                    "chat_type",
+                    "chat_id"
                   ]
                 }
               },
